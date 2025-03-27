@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Michael Wardlow / 001
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -250,7 +250,44 @@ public class CuckooHash<K, V> {
 		// Also make sure you read this method's prologue above, it should help
 		// you. Especially the two HINTS in the prologue.
 
-		return;
+		
+		// Calculate the primary and secondary hash positions
+		int pos1 = hash1(key);
+		int pos2 = hash2(key);
+
+		// Check if the key-value pair exists at either position
+		if ((table[pos1] != null && table[pos1].getBucKey().equals(key) && table[pos1].getValue().equals(value)) ||
+        	(table[pos2] != null && table[pos2].getBucKey().equals(key) && table[pos2].getValue().equals(value))) {
+        	return; 
+    	}
+
+		// New bucket for the key-value pair
+		Bucket<K, V> newBucket = new Bucket<>(key, value);
+    
+		// Iterate for a maximum of capicity times
+    	for (int i = 0; i < CAPACITY; i++) { 
+        	if (table[pos1] == null) {			// Checking if the spot is empty
+           		table[pos1] = newBucket;		// Placce bucket if the spot is empty
+            	return;
+        } else {									// If the spot is occupied, displace the existing bucket
+            Bucket<K, V> displacedBucket = table[pos1];			// Store the displace bucket
+            table[pos1] = newBucket;			// Place the new bucket
+            newBucket = displacedBucket;
+        }
+        
+		// Alternate between the two hash positions
+        pos1 = (pos1 == hash1(newBucket.getBucKey())) ? hash2(newBucket.getBucKey()) : hash1(newBucket.getBucKey());
+        
+		// If the new position is empty, place the displaced bucket there
+        if (table[pos1] == null) {
+            table[pos1] = newBucket;		// Place the bucket at the alternate position
+            return;
+        	}
+    	}
+    	
+		// If the table is full, rehash and reinsert the displace bucket
+   	 	rehash();
+    	put(newBucket.getBucKey(), newBucket.getValue());		// reinsert the bucket
 	}
 
 
