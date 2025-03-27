@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Michael Wardlow / 001
  *
  *   Note, additional comments provided throughout source code is
  *   for educational purposes.
@@ -224,7 +224,15 @@ class BloomFilter {
         // this class on available methods. You can also see how method 'add'
         // in this class uses the object.
 
-        return false;
+        for (int n = 0; n < noHashes; n++) {
+            long hc = hashCode(s, n);
+            int bitNo = (int) (hc) & this.hashMask;         // Generate hash code
+            if (!data.get(bitNo)) {             // Map to bit index
+                return false;           // reutr false if a bit isn't set
+            }
+        }
+
+        return true;        // All  the bits are set, so it is most probably in the set
     }
 
 
