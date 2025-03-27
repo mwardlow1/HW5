@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Michael Wardlow / 001
  *
  *   This java file contains the problem solutions of isSubSet, findKthLargest,
  *   and sort2Arrays methods. You should utilize the Java Collection Framework for
@@ -34,7 +34,21 @@ class ProblemSolutions {
 
         // ADD YOU CODE HERE -- DON'T FORGET TO ADD YOR NAME AT TOP OF FILE
 
-        return false;
+        // Add the elements of list1 to a HashSet
+        HashSet<Integer> set = new HashSet<>();
+        for (int num : list1) {
+            set.add(num);
+        }
+
+
+        // Check if all elements of list2 are in the HasSet
+        for (int num : list2) {
+            if (!set.contains(num)) {
+                return false;       // if any elements aren't found, B is not a subset
+            }
+        }
+
+        return true;        // True since all elements of B are found in A
     }
 
 
@@ -55,7 +69,22 @@ class ProblemSolutions {
 
         // ADD YOUR CODE HERE
 
-        return 0;
+        // Creating a min-Heap to store the k largest elements
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+
+        // Adding elements to the heap
+        for (int num : array) {
+            minHeap.offer(num);
+
+
+            // Removing the smallest element once size exceeds k
+            if (minHeap.size() > k) {
+                minHeap.poll();
+            }
+        }
+
+        // Return the root, as it is the kth largest element
+        return minHeap.peek();
     }
 
 
@@ -76,7 +105,18 @@ class ProblemSolutions {
 
         // ADD YOU CODE HERE
 
-        return null;
+
+        // Create a new array to hold all the elements
+        int[] mergedArray = new int[array1.length + array2.length];
+
+        // Copy both arrays A and B into the mergedArray
+        System.arraycopy(array1, 0, mergedArray, 0, array1.length);
+        System.arraycopy(array2, 0, mergedArray, array1.length, array2.length);
+
+        // Sort the merged array
+        Arrays.sort(mergedArray);
+
+        return mergedArray;     // Returns the sorted array with all elements in A and B
     }
 
 }
